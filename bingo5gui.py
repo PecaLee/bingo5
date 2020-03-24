@@ -17,7 +17,10 @@ def s_button_destroy():
         input_text.destroy()
         text_enter.destroy()
         
-        bingo = [0, 0, 0, 0, "fr", 0, 0, 0, 0]
+        bingo = [0, 0, 0, 0, "free", 0, 0, 0, 0]
+
+        def end_app():
+            bingo_window.destroy()
 
         def bingo5():
             bingo[0] = randrange(1, 5)
@@ -34,12 +37,29 @@ def s_button_destroy():
                 if num < 3:
                     for play in range(1, num+1):
                         bingo5()
-                        print(f"{play}番目抽選", " ", "="*16, f"=  {bingo[0]} =  {bingo[1]} = {bingo[2]} =", "="*16, f"= {bingo[3]} = {bingo[4]} = {bingo[5]} =", "="*16, f"= {bingo[6]} = {bingo[7]} = {bingo[8]} =", "="*16, " ", sep='\n' )
-                    print("当たりますように")
+                        bingo1_info = tkinter.Label(bingo_window, text = f"{play}番目の抽選", font = article_style)
+                        bingo1_info.pack()
+
+                        globals()[f"frame{play}"] = tkinter.Frame(bingo_window)
+                        globals()[f"frame{play}"].pack()
+                        anchor_row = [0, 0, 0, 1, 1, 1, 2, 2, 2]
+                        anchor_column = [1, 2, 3, 1, 2, 3, 1, 2, 3]
+                        for bingo_num in range(1, 10):
+                            bingo1_info = tkinter.Label(bingo_window, text = f"{play}番目抽選", font = article_style)
+                            globals()[f"bingo_{bingo_num}"] = tkinter.Label(globals()[f"frame{play}"], text = bingo[bingo_num-1], font = article_style, height = 2, width = 2)
+                            globals()[f"bingo_{bingo_num}"].grid(row = anchor_row[bingo_num-1], column = anchor_column[bingo_num-1], padx = 20, pady = 20)
+
+                    pray = tkinter.Label(bingo_window, text = "当たりますように", font = article_style)
+                    pray.pack()
             elif num == 0:
-                print(" ", "ビンゴ５抽選を辞めます。", sep='\n')
+                end_bingo = tkinter.Label(bingo_window, text = "ビンゴ５抽選を辞めます。", font = article_style, height = 5)
+                end_bingo.pack()
             else:
-                print(" ", "宝くじは２回までやりましょう。", sep='\n')
+                limit_bingo = tkinter.Label(bingo_window, text = "宝くじは２回までやりましょう。", font = article_style, height = 5)
+                limit_bingo.pack()
+
+            end_app_button = tkinter.Button(bingo_window, command = end_app, text = "終了", font = title_style)
+            end_app_button.pack(padx = 30, pady = 30)
 
         takara()
 
